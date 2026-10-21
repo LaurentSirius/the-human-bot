@@ -1,12 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import settings from '../data/settings.json';
+import { extractYoutubeId, youtubeEmbedUrl } from '../lib/youtube';
 
-const embedSrc = `https://www.youtube-nocookie.com/embed/${settings.featuredYoutubeId}?rel=0`;
+const s = settings as typeof settings & { featuredYoutubeId?: string };
+const featuredId = extractYoutubeId(s.featuredYoutube) ?? extractYoutubeId(s.featuredYoutubeId);
+const embedSrc = featuredId ? youtubeEmbedUrl(featuredId) : null;
 ---
 
 <BaseLayout current="home">
   <section class="video-block" aria-labelledby="featured-title">
+    {embedSrc && (
     <div class="video-frame">
       <iframe
         src={embedSrc}
@@ -17,6 +21,7 @@ const embedSrc = `https://www.youtube-nocookie.com/embed/${settings.featuredYout
         referrerpolicy="strict-origin-when-cross-origin"
       ></iframe>
     </div>
+    )}
     <p id="featured-title" class="video-caption">{settings.featuredVideoTitle}</p>
     <p class="tagline">{settings.tagline}</p>
   </section>

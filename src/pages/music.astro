@@ -1,9 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { youtubeEmbedUrl, youtubeWatchUrl } from '../lib/youtube';
 
+// Featured first, then "order" (small = top), then most recent date.
 const releases = (await getCollection('releases')).sort(
-  (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    (a.data.order ?? 0) - (b.data.order ?? 0) ||
+    (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0)
 );
 ---
 
@@ -12,10 +17,8 @@ const releases = (await getCollection('releases')).sort(
   <div class="list">
     {
       releases.map((release) => {
-        const embedSrc = `https://www.youtube-nocookie.com/embed/${release.data.youtubeId}?rel=0`;
-        const watchUrl =
-          release.data.youtubeUrl ??
-          `https://www.youtube.com/watch?v=${release.data.youtubeId}`;
+        const embedSrc = youtubeEmbedUrl(release.data.youtubeId);
+        const watchUrl = youtubeWatchUrl(release.data.youtubeId);
         return (
           <article class="card">
             <h2>{release.data.title}</h2>

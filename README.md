@@ -36,9 +36,35 @@ npm run preview  # prévisualise le build de production
 
 ## Contenu éditable
 
-- **Paramètres** : `src/data/settings.json` (titre, tagline, liens sociaux, vidéo d’accueil)
-- **Sorties** : `src/content/releases/*.md`
+- **Accueil & réglages** : `src/data/settings.json` (titre, accroche, vidéo d’accueil `featuredYoutube`, boutons)
+- **Sorties / Morceaux** : `src/content/releases/*.md` (champ `youtube` = n’importe quel lien YouTube)
 - **Liens** : `src/content/links/*.md`
+
+Les liens YouTube sont acceptés sous toutes les formes (`youtube.com/watch?v=…`, `youtu.be/…`,
+`/shorts/…`, `/live/…`, ou l’ID seul) : voir `src/lib/youtube.ts`. Les anciens champs
+`youtubeId` / `youtubeUrl` / `featuredYoutubeId` restent acceptés.
+
+## Utiliser l’admin — mode d’emploi (pour les musiciens 🎛️)
+
+1. Aller sur **https://the-human-bot.netlify.app/admin/** et se connecter (e-mail + mot de passe).
+2. À gauche, 4 rubriques :
+   - **🏠 Accueil & réglages** → la vidéo principale, la phrase d’accroche, les 3 boutons du bas.
+   - **🎵 Sorties / Morceaux** → les clips de la page Music.
+   - **🔗 Liens** → les cadres cliquables de la page Links.
+   - **❓ Mode d’emploi** → ce guide, directement dans l’admin.
+3. **Ajouter un morceau** : 🎵 Sorties / Morceaux → **« + Sortie »** → titre + lien YouTube
+   (sur YouTube : « Partager » → « Copier »). Facultatif : date, description,
+   **★ Mettre en avant** (= tout en haut de la page Music), position dans la liste.
+4. À droite, **l’aperçu en direct** montre le rendu au style du site (fond noir, typo pixel).
+5. Cliquer sur **« Publier »** (puis « Publier maintenant »). Le site se met à jour tout seul en 1 à 2 minutes.
+
+Chaque champ a une petite aide en dessous ; les champs « (optionnel) » peuvent rester vides.
+Ordre de la page Music : mis en avant d’abord, puis « Position dans la liste » (1 = en haut), puis les plus récents.
+Pas de workflow de validation : « Publier » met en ligne directement (chaque publication = un commit Git, donc tout est réversible).
+
+Fichiers de l’admin : `public/admin/config.yml` (champs), `public/admin/cms-setup.js`
+(encadrés d’aide + aperçus), `public/admin/preview.css` (copie de `src/styles/global.css`
+pour les aperçus — à garder synchronisée si le design change).
 
 ## Decap CMS (`/admin`)
 

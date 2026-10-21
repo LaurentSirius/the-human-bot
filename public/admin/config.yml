@@ -1,64 +1,207 @@
 # Decap CMS — The Human Bot
-# Backend: on Netlify, use Git Gateway + Netlify Identity.
-# For local preview without auth: npx decap-server (optional) or use `local_backend: true`.
+# Backend: Git Gateway + Netlify Identity (publication directe sur main, pas de workflow éditorial).
+# Edition en local sans login : voir README (local_backend + npx decap-server).
 
 backend:
   name: git-gateway
   branch: main
+  commit_messages:
+    create: 'CMS : ajout de « {{slug}} » ({{collection}})'
+    update: 'CMS : modification de « {{slug}} » ({{collection}})'
+    delete: 'CMS : suppression de « {{slug}} » ({{collection}})'
+    uploadMedia: 'CMS : ajout du fichier {{path}}'
+    deleteMedia: 'CMS : suppression du fichier {{path}}'
 
-# Uncomment for local editing without Netlify Identity:
 # local_backend: true
+
+locale: fr
+site_url: https://the-human-bot.netlify.app
+display_url: https://the-human-bot.netlify.app
+logo_url: /favicon.svg
 
 media_folder: public/uploads
 public_folder: /uploads
 
-locale: fr
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: '-'
 
 collections:
+  # ───────────────────────────── 1. Accueil & réglages
   - name: settings
-    label: Paramètres du site
+    label: '🏠 Accueil & réglages'
+    label_singular: Réglage
+    description: "Ce qui s'affiche sur la page d'accueil : nom, phrase d'accroche, vidéo principale et les 3 boutons du bas."
+    editor: { preview: true }
     files:
       - name: site
-        label: Site
+        label: "Page d'accueil"
         file: src/data/settings.json
+        description: "Vidéo principale, accroche et boutons de la page d'accueil."
         fields:
-          - { label: Titre, name: title, widget: string }
-          - { label: Tagline, name: tagline, widget: string }
-          - { label: YouTube ID (accueil), name: featuredYoutubeId, widget: string }
-          - { label: Titre vidéo (accueil), name: featuredVideoTitle, widget: string }
-          - label: Réseaux
+          - name: _help
+            label: '💡 Comment ça marche'
+            widget: notice
+            required: false
+            text: "Modifie les champs ci-dessous, regarde l'aperçu à droite, puis clique sur « Publier » en haut. Le site se met à jour tout seul en 1 à 2 minutes."
+          - label: Nom du projet
+            name: title
+            widget: string
+            hint: "Affiché dans l'onglet du navigateur et sur Google. Ex. THE HUMAN BOT"
+          - label: "Phrase d'accroche"
+            name: tagline
+            widget: string
+            hint: "Petite phrase sous la vidéo de l'accueil. Ex. electronic / machine soul"
+          - label: "Vidéo de l'accueil (lien YouTube)"
+            name: featuredYoutube
+            widget: string
+            hint: "Colle simplement le lien de la vidéo copié depuis YouTube (bouton « Partager » → « Copier »). Tous les formats marchent : youtube.com/watch?v=…, youtu.be/…, Shorts…"
+            pattern: ['(youtu\.be/|youtube\.com/|youtube-nocookie\.com/|^[A-Za-z0-9_-]{11}$)', "Ça ne ressemble pas à un lien YouTube (ex. https://youtu.be/r1gGGGSPjS0)"]
+          - label: 'Titre de la vidéo'
+            name: featuredVideoTitle
+            widget: string
+            hint: 'Affiché juste sous la vidéo. Ex. For Better Days'
+          - label: "Boutons de l'accueil"
             name: social
             widget: object
+            collapsed: false
+            summary: 'Instagram · YouTube · Stickers'
+            hint: 'Les 3 boutons en bas de la page d’accueil. Mets une adresse complète qui commence par https://'
             fields:
-              - { label: Instagram, name: instagram, widget: string }
-              - { label: YouTube, name: youtube, widget: string }
-              - { label: Stickers (URL), name: stickers, widget: string }
+              - label: 'Bouton « Instagram » → lien'
+                name: instagram
+                widget: string
+                hint: 'Ex. https://www.instagram.com/thehumanbotmusic/'
+                pattern: ['^https?://', 'Le lien doit commencer par https://']
+              - label: 'Bouton « YouTube » → lien'
+                name: youtube
+                widget: string
+                hint: 'Ex. https://www.youtube.com/@thehumanbotmusic'
+                pattern: ['^https?://', 'Le lien doit commencer par https://']
+              - label: 'Bouton « Stickers » → lien'
+                name: stickers
+                widget: string
+                hint: 'Où on peut obtenir les stickers / QR codes.'
+                pattern: ['^https?://', 'Le lien doit commencer par https://']
 
+  # ───────────────────────────── 2. Sorties
   - name: releases
-    label: Sorties / Vidéos
+    label: '🎵 Sorties / Morceaux'
+    label_singular: Sortie
+    description: "Les morceaux et clips affichés sur la page Music. Clique sur « + Sortie » pour en ajouter un : il suffit d'un titre et d'un lien YouTube."
     folder: src/content/releases
     create: true
-    slug: '{{slug}}'
+    delete: true
     extension: md
+    format: frontmatter
+    slug: '{{title}}'
+    identifier_field: title
+    summary: "{{title}}{{featured | ternary(' ★ en avant', '')}} — {{date | date('DD/MM/YYYY')}}"
+    sortable_fields: ['order', 'title', 'date']
+    view_filters:
+      - { label: '★ Mis en avant', field: featured, pattern: true }
+    view_groups:
+      - { label: Année, field: date, pattern: '\d{4}' }
     fields:
-      - { label: Titre, name: title, widget: string }
-      - { label: YouTube ID, name: youtubeId, widget: string, hint: 'ex. r1gGGGSPjS0' }
-      - { label: URL YouTube, name: youtubeUrl, widget: string, required: false }
-      - { label: Date, name: date, widget: datetime, required: false }
-      - { label: Mis en avant, name: featured, widget: boolean, default: false }
-      - { label: Description, name: description, widget: text, required: false }
-      - { label: Ordre, name: order, widget: number, default: 0 }
-      - { label: Corps, name: body, widget: markdown, required: false }
+      - name: _help
+        label: '💡 Comment ça marche'
+        widget: notice
+        required: false
+        text: "Remplis le titre et colle le lien YouTube : l'aperçu à droite montre la carte telle qu'elle apparaîtra sur la page Music. Clique ensuite sur « Publier »."
+      - label: Titre du morceau
+        name: title
+        widget: string
+        hint: 'Ex. For Better Days'
+      - label: Lien YouTube
+        name: youtube
+        widget: string
+        hint: "Colle le lien de la vidéo (bouton « Partager » → « Copier » sur YouTube). Tous les formats marchent : youtube.com/watch?v=…, youtu.be/…, Shorts…"
+        pattern: ['(youtu\.be/|youtube\.com/|youtube-nocookie\.com/|^[A-Za-z0-9_-]{11}$)', "Ça ne ressemble pas à un lien YouTube (ex. https://youtu.be/r1gGGGSPjS0)"]
+      - label: Date de sortie
+        name: date
+        widget: datetime
+        required: false
+        format: 'YYYY-MM-DD'
+        date_format: 'DD/MM/YYYY'
+        time_format: false
+        picker_utc: true
+        hint: 'Facultatif. Sert à classer les sorties (les plus récentes en premier).'
+      - label: Description
+        name: description
+        widget: text
+        required: false
+        hint: 'Facultatif. Une ou deux phrases affichées au-dessus de la vidéo.'
+      - label: '★ Mettre en avant'
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+        hint: 'Active pour afficher ce morceau tout en haut de la page Music.'
+      - label: "Position dans la liste"
+        name: order
+        widget: number
+        value_type: int
+        min: 0
+        default: 10
+        required: false
+        hint: '1 = en haut, 2 = juste après, etc. En cas d’égalité, la plus récente passe devant.'
 
+  # ───────────────────────────── 3. Liens
   - name: links
-    label: Liens
+    label: '🔗 Liens'
+    label_singular: Lien
+    description: 'Les liens de la page Links (Instagram, YouTube, stickers, Spotify…). Un lien = un cadre cliquable. Clique sur « + Lien » pour en ajouter un.'
     folder: src/content/links
     create: true
-    slug: '{{slug}}'
+    delete: true
     extension: md
+    format: frontmatter
+    slug: '{{title}}'
+    identifier_field: title
+    summary: '{{order}}. {{title}}'
+    sortable_fields: ['order', 'title']
     fields:
-      - { label: Titre, name: title, widget: string }
-      - { label: URL, name: url, widget: string }
-      - { label: Ordre, name: order, widget: number, default: 0 }
-      - { label: Note, name: note, widget: text, required: false }
-      - { label: Corps, name: body, widget: markdown, required: false }
+      - name: _help
+        label: '💡 Comment ça marche'
+        widget: notice
+        required: false
+        text: "Donne un nom au lien, colle l'adresse complète (https://…), ajoute une petite phrase si tu veux, puis « Publier »."
+      - label: Nom affiché
+        name: title
+        widget: string
+        hint: 'Le texte du lien, en gros. Ex. Instagram, Spotify, Bandcamp'
+      - label: Adresse du lien
+        name: url
+        widget: string
+        hint: "L'adresse complète, à copier depuis la barre du navigateur. Doit commencer par https://"
+        pattern: ['^(https?://|mailto:)', 'Le lien doit commencer par https:// (ou mailto: pour un e-mail)']
+      - label: Petite phrase
+        name: note
+        widget: text
+        required: false
+        hint: 'Facultatif. Affichée sous le lien. Ex. Follow @thehumanbotmusic'
+      - label: 'Position dans la liste'
+        name: order
+        widget: number
+        value_type: int
+        min: 0
+        default: 10
+        required: false
+        hint: '1 = en haut de la page, 2 = juste après, etc.'
+
+  # ───────────────────────────── 4. Aide
+  - name: help
+    label: "❓ Mode d'emploi"
+    description: "Le guide rapide de l'admin. Rien à modifier ici."
+    editor: { preview: false }
+    files:
+      - name: guide
+        label: "Lire le mode d'emploi"
+        file: src/data/admin-help.json
+        fields:
+          - name: _guide
+            label: "Mode d'emploi"
+            widget: notice
+            required: false
+            guide: true
