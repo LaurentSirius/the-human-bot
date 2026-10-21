@@ -32,7 +32,7 @@ collections:
   - name: settings
     label: '🏠 Accueil & réglages'
     label_singular: Réglage
-    description: "Ce qui s'affiche sur la page d'accueil : nom, phrase d'accroche, vidéo principale et les 3 boutons du bas."
+    description: "Ce qui s'affiche sur la page d'accueil : nom, phrase d'accroche, vidéo principale et les boutons du bas."
     editor: { preview: true }
     files:
       - name: site
@@ -63,27 +63,31 @@ collections:
             widget: string
             hint: 'Affiché juste sous la vidéo. Ex. For Better Days'
           - label: "Boutons de l'accueil"
-            name: social
-            widget: object
-            collapsed: false
-            summary: 'Instagram · YouTube · Stickers'
-            hint: 'Les 3 boutons en bas de la page d’accueil. Mets une adresse complète qui commence par https://'
+            name: buttons
+            widget: list
+            min: 0
+            collapsed: true
+            allow_add: true
+            add_to_top: false
+            label_singular: bouton
+            summary: '{{fields.label}} — {{fields.url}}'
+            hint: "Les boutons en bas de la page d'accueil, dans cet ordre. « Ajouter bouton » pour en créer un, la croix × pour en supprimer, la poignée ═ en haut de chaque bouton pour changer l'ordre (glisser-déposer). Aucun bouton = la rangée disparaît."
             fields:
-              - label: 'Bouton « Instagram » → lien'
-                name: instagram
+              - label: Texte du bouton
+                name: label
                 widget: string
-                hint: 'Ex. https://www.instagram.com/thehumanbotmusic/'
-                pattern: ['^https?://', 'Le lien doit commencer par https://']
-              - label: 'Bouton « YouTube » → lien'
-                name: youtube
+                hint: 'Le mot écrit sur le bouton. Ex. Insta, YouTube, Stickers, Spotify'
+              - label: Lien
+                name: url
                 widget: string
-                hint: 'Ex. https://www.youtube.com/@thehumanbotmusic'
-                pattern: ['^https?://', 'Le lien doit commencer par https://']
-              - label: 'Bouton « Stickers » → lien'
-                name: stickers
-                widget: string
-                hint: 'Où on peut obtenir les stickers / QR codes.'
-                pattern: ['^https?://', 'Le lien doit commencer par https://']
+                hint: "L'adresse complète, à copier depuis le navigateur. Ex. https://www.instagram.com/thehumanbotmusic/"
+                pattern: ['^(https?://|mailto:)', 'Le lien doit commencer par https:// (ou mailto: pour un e-mail)']
+              - label: Ouvrir dans un nouvel onglet
+                name: newTab
+                widget: boolean
+                default: true
+                required: false
+                hint: 'Activé = le site reste ouvert dans un autre onglet (conseillé pour Instagram, YouTube…).'
 
   # ───────────────────────────── 2. Sorties
   - name: releases

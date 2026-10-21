@@ -36,7 +36,7 @@ npm run preview  # prévisualise le build de production
 
 ## Contenu éditable
 
-- **Accueil & réglages** : `src/data/settings.json` (titre, accroche, vidéo d’accueil `featuredYoutube`, boutons)
+- **Accueil & réglages** : `src/data/settings.json` (titre, accroche, vidéo d’accueil `featuredYoutube`, liste `buttons` = `{ label, url, newTab }`)
 - **Sorties / Morceaux** : `src/content/releases/*.md` (champ `youtube` = n’importe quel lien YouTube)
 - **Liens** : `src/content/links/*.md`
 
@@ -48,7 +48,8 @@ Les liens YouTube sont acceptés sous toutes les formes (`youtube.com/watch?v=�
 
 1. Aller sur **https://the-human-bot.netlify.app/admin/** et se connecter (e-mail + mot de passe).
 2. À gauche, 4 rubriques :
-   - **🏠 Accueil & réglages** → la vidéo principale, la phrase d’accroche, les 3 boutons du bas.
+   - **🏠 Accueil & réglages** → la vidéo principale, la phrase d’accroche, les boutons du bas
+     (liste libre : « Ajouter bouton », croix × pour supprimer, poignée ═ (glisser-déposer) pour l’ordre ; aucun bouton = rangée masquée).
    - **🎵 Sorties / Morceaux** → les clips de la page Music.
    - **🔗 Liens** → les cadres cliquables de la page Links.
    - **❓ Mode d’emploi** → ce guide, directement dans l’admin.

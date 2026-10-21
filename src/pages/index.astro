@@ -3,7 +3,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import settings from '../data/settings.json';
 import { extractYoutubeId, youtubeEmbedUrl } from '../lib/youtube';
 
-const s = settings as typeof settings & { featuredYoutubeId?: string };
+type Button = { label: string; url: string; newTab?: boolean };
+const s = settings as typeof settings & {
+  featuredYoutubeId?: string;
+  buttons?: Button[];
+  social?: { instagram?: string; youtube?: string; stickers?: string };
+};
+// New list format; falls back to the legacy fixed "social" fields.
+const buttons: Button[] = (
+  s.buttons ??
+  [
+    { label: 'Instagram', url: s.social?.instagram ?? '' },
+    { label: 'YouTube', url: s.social?.youtube ?? '' },
+    { label: 'Stickers', url: s.social?.stickers ?? '' },
+  ]
+).filter((b) => b && b.label && b.url);
 const featuredId = extractYoutubeId(s.featuredYoutube) ?? extractYoutubeId(s.featuredYoutubeId);
 const embedSrc = featuredId ? youtubeEmbedUrl(featuredId) : null;
 ---
@@ -26,9 +40,15 @@ const embedSrc = featuredId ? youtubeEmbedUrl(featuredId) : null;
     <p class="tagline">{settings.tagline}</p>
   </section>
 
-  <div class="cta-row">
-    <a class="outlined-btn" href={settings.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a class="outlined-btn" href={settings.social.youtube} target="_blank" rel="noopener noreferrer">YouTube</a>
-    <a class="outlined-btn" href={settings.social.stickers} target="_blank" rel="noopener noreferrer">Stickers</a>
-  </div>
+  {buttons.length > 0 && (
+    <div class="cta-row">
+      {buttons.map((b) =>
+        b.newTab === false ? (
+          <a class="outlined-btn" href={b.url}>{b.label}</a>
+        ) : (
+          <a class="outlined-btn" href={b.url} target="_blank" rel="noopener noreferrer">{b.label}</a>
+        )
+      )}
+    </div>
+  )}
 </BaseLayout>

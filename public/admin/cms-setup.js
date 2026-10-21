@@ -65,7 +65,7 @@
   // ---------- Widget "notice" : encadré d'aide en lecture seule ----------
   var GUIDE = [
     ['Se repérer', [
-      '🏠 Accueil & réglages : la vidéo principale, la phrase d’accroche et les 3 boutons de la page d’accueil.',
+      '🏠 Accueil & réglages : la vidéo principale, la phrase d’accroche et les boutons de la page d’accueil.',
       '🎵 Sorties / Morceaux : les clips de la page Music.',
       '🔗 Liens : les cadres cliquables de la page Links.',
     ]],
@@ -77,6 +77,12 @@
     ]],
     ['Changer la vidéo de l’accueil', [
       '🏠 Accueil & réglages → Page d’accueil → colle le nouveau lien dans « Vidéo de l’accueil », change le titre, puis « Publier ».',
+    ]],
+    ['Gérer les boutons de l’accueil', [
+      '🏠 Accueil & réglages → Page d’accueil → « Boutons de l’accueil ».',
+      'Clique sur un bouton pour l’ouvrir et changer son texte ou son lien.',
+      '« Ajouter bouton » pour en créer un, la croix × pour en supprimer, la poignée ═ (glisser-déposer) pour changer l’ordre.',
+      'Aucun bouton = la rangée de boutons disparaît de l’accueil.',
     ]],
     ['Bon à savoir', [
       'L’aperçu à droite montre le rendu en direct (bouton 👁 en haut pour l’afficher / le cacher).',
@@ -137,7 +143,7 @@
             h('h2', null, title),
             d.get('description') ? h('p', null, d.get('description')) : null,
             video(id, title),
-            h('p', { className: 'meta' }, h('a', { href: '#' }, 'Watch on YouTube →')))),
+            h('p', { className: 'meta' }, h('a', { href: '#' }, 'Watch on YouTube >')))),
       ]);
     },
   });
@@ -163,15 +169,19 @@
     render: function () {
       var d = this.props.entry.get('data');
       var title = d.get('featuredVideoTitle') || '';
-      var social = d.get('social');
-      function btn(label) { return h('a', { className: 'outlined-btn', href: '#', key: label }, label); }
+      var list = d.get('buttons');
+      var buttons = [];
+      if (list && list.size !== undefined) {
+        list.forEach(function (b, i) {
+          if (b && b.get && (b.get('label') || b.get('url'))) buttons.push(h('a', { className: 'outlined-btn', href: '#', key: i }, b.get('label') || '…'));
+        });
+      }
       return siteShell('home', [
         h('section', { className: 'video-block', key: 'v' },
           video(extractYoutubeId(d.get('featuredYoutube')), title),
           h('p', { className: 'video-caption' }, title),
           h('p', { className: 'tagline' }, d.get('tagline') || '')),
-        h('div', { className: 'cta-row', key: 'c' },
-          social ? [btn('Instagram'), btn('YouTube'), btn('Stickers')] : null),
+        buttons.length ? h('div', { className: 'cta-row', key: 'c' }, buttons) : null,
       ]);
     },
   });

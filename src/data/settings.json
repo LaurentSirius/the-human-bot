@@ -3,9 +3,21 @@
   "tagline": "electronic / machine soul",
   "featuredYoutube": "https://www.youtube.com/watch?v=r1gGGGSPjS0",
   "featuredVideoTitle": "For Better Days",
-  "social": {
-    "instagram": "https://www.instagram.com/thehumanbotmusic/",
-    "youtube": "https://www.youtube.com/@thehumanbotmusic",
-    "stickers": "https://www.instagram.com/thehumanbotmusic/"
-  }
+  "buttons": [
+    {
+      "label": "Instagram",
+      "url": "https://www.instagram.com/thehumanbotmusic/",
+      "newTab": true
+    },
+    {
+      "label": "YouTube",
+      "url": "https://www.youtube.com/@thehumanbotmusic",
+      "newTab": true
+    },
+    {
+      "label": "Stickers",
+      "url": "https://www.instagram.com/thehumanbotmusic/",
+      "newTab": true
+    }
+  ]
 }
