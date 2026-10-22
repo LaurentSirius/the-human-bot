@@ -44,18 +44,18 @@ Les liens YouTube sont acceptés sous toutes les formes (`youtube.com/watch?v=�
 `/shorts/…`, `/live/…`, ou l’ID seul) : voir `src/lib/youtube.ts`. Les anciens champs
 `youtubeId` / `youtubeUrl` / `featuredYoutubeId` restent acceptés.
 
-## Utiliser l’admin — mode d’emploi (pour les musiciens 🎛️)
+## Utiliser l’admin — mode d’emploi (pour les musiciens)
 
 1. Aller sur **https://the-human-bot.netlify.app/admin/** et se connecter (e-mail + mot de passe).
 2. À gauche, 4 rubriques :
-   - **🏠 Accueil & réglages** → la vidéo principale, la phrase d’accroche, les boutons du bas
+   - **Accueil & réglages** → la vidéo principale, la phrase d’accroche, les boutons du bas
      (liste libre : « Ajouter bouton », croix × pour supprimer, poignée ═ (glisser-déposer) pour l’ordre ; aucun bouton = rangée masquée).
-   - **🎵 Sorties / Morceaux** → les clips de la page Music.
-   - **🔗 Liens** → les cadres cliquables de la page Links.
-   - **❓ Mode d’emploi** → ce guide, directement dans l’admin.
-3. **Ajouter un morceau** : 🎵 Sorties / Morceaux → **« + Sortie »** → titre + lien YouTube
+   - **Sorties / Morceaux** → les clips de la page Music.
+   - **Liens** → les cadres cliquables de la page Links.
+   - **Mode d’emploi** → ce guide, directement dans l’admin.
+3. **Ajouter un morceau** : Sorties / Morceaux → **« + Sortie »** → titre + lien YouTube
    (sur YouTube : « Partager » → « Copier »). Facultatif : date, description,
-   **★ Mettre en avant** (= tout en haut de la page Music), position dans la liste.
+   **Mettre en avant** (= tout en haut de la page Music), position dans la liste.
 4. À droite, **l’aperçu en direct** montre le rendu au style du site (fond noir, typo pixel).
 5. Cliquer sur **« Publier »** (puis « Publier maintenant »). Le site se met à jour tout seul en 1 à 2 minutes.
 

@@ -30,7 +30,7 @@ slug:
 collections:
   # ───────────────────────────── 1. Accueil & réglages
   - name: settings
-    label: '🏠 Accueil & réglages'
+    label: 'Accueil & réglages'
     label_singular: Réglage
     description: "Ce qui s'affiche sur la page d'accueil : nom, phrase d'accroche, vidéo principale et les boutons du bas."
     editor: { preview: true }
@@ -41,7 +41,7 @@ collections:
         description: "Vidéo principale, accroche et boutons de la page d'accueil."
         fields:
           - name: _help
-            label: '💡 Comment ça marche'
+            label: 'Comment ça marche'
             widget: notice
             required: false
             text: "Modifie les champs ci-dessous, regarde l'aperçu à droite, puis clique sur « Publier » en haut. Le site se met à jour tout seul en 1 à 2 minutes."
@@ -91,7 +91,7 @@ collections:
 
   # ───────────────────────────── 2. Sorties
   - name: releases
-    label: '🎵 Sorties / Morceaux'
+    label: 'Sorties / Morceaux'
     label_singular: Sortie
     description: "Les morceaux et clips affichés sur la page Music. Clique sur « + Sortie » pour en ajouter un : il suffit d'un titre et d'un lien YouTube."
     folder: src/content/releases
@@ -104,12 +104,12 @@ collections:
     summary: "{{title}}{{featured | ternary(' ★ en avant', '')}} — {{date | date('DD/MM/YYYY')}}"
     sortable_fields: ['order', 'title', 'date']
     view_filters:
-      - { label: '★ Mis en avant', field: featured, pattern: true }
+      - { label: 'Mis en avant', field: featured, pattern: true }
     view_groups:
       - { label: Année, field: date, pattern: '\d{4}' }
     fields:
       - name: _help
-        label: '💡 Comment ça marche'
+        label: 'Comment ça marche'
         widget: notice
         required: false
         text: "Remplis le titre et colle le lien YouTube : l'aperçu à droite montre la carte telle qu'elle apparaîtra sur la page Music. Clique ensuite sur « Publier »."
@@ -136,7 +136,7 @@ collections:
         widget: text
         required: false
         hint: 'Facultatif. Une ou deux phrases affichées au-dessus de la vidéo.'
-      - label: '★ Mettre en avant'
+      - label: 'Mettre en avant'
         name: featured
         widget: boolean
         default: false
@@ -153,7 +153,7 @@ collections:
 
   # ───────────────────────────── 3. Liens
   - name: links
-    label: '🔗 Liens'
+    label: 'Liens'
     label_singular: Lien
     description: 'Les liens de la page Links (Instagram, YouTube, stickers, Spotify…). Un lien = un cadre cliquable. Clique sur « + Lien » pour en ajouter un.'
     folder: src/content/links
@@ -167,7 +167,7 @@ collections:
     sortable_fields: ['order', 'title']
     fields:
       - name: _help
-        label: '💡 Comment ça marche'
+        label: 'Comment ça marche'
         widget: notice
         required: false
         text: "Donne un nom au lien, colle l'adresse complète (https://…), ajoute une petite phrase si tu veux, puis « Publier »."
@@ -196,7 +196,7 @@ collections:
 
   # ───────────────────────────── 4. Aide
   - name: help
-    label: "❓ Mode d'emploi"
+    label: "Mode d'emploi"
     description: "Le guide rapide de l'admin. Rien à modifier ici."
     editor: { preview: false }
     files:
